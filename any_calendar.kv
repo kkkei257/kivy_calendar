@@ -1,0 +1,830 @@
+#:kivy 1.0
+#:import kivy kivy
+#:import main main
+
+Any_Calendar
+
+<Any_Calendar>:
+    canvas:
+        Color:
+            rgb: 1, 1, 1, 1
+        Rectangle:
+#            source: 'images/background.jpg'
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        size: root.size
+        padding: '8dp'
+        spacing: '8dp'
+
+                
+        # 上部に画像を表示
+        ScrollView:
+            size_hint_y: .3
+            do_scroll_x: False
+            do_scroll_y: True
+            bar_width: 4
+                        
+            canvas.before:
+                Color:
+                    rgba: (1, 1, 1, root.background_through)
+                Rectangle:
+                    source: root.background
+                    pos: self.pos
+                    size: self.size
+                    #size: (root.width, root.height * 0.9)                
+
+            Label:
+                size_hint_x: 1.0
+                size_hint_y: None
+                id: lrc_text
+                font_size: 40
+                text_size: self.width, None
+                height: self.texture_size[1]
+                text: root.text
+                color: root.lrc_r, root.lrc_g, root.lrc_b, root.lrc_through
+                
+        
+        
+        # 年月と月の切り替えボタン
+        BoxLayout:
+            size_hint_y: .05
+            
+            Button:
+                size_hint_x: .2
+                id: button_back
+                background_normal: ""
+                background_color: 1, 1, 1, 0
+                on_release: root.buttonBack()
+                Image:
+                    source: "image/back.png"
+                    pos: self.parent.x, self.parent.y
+                    size: self.parent.width * 0.7, self.parent.height * 0.7
+                    allow_stretch: True
+            
+            Button:
+                size_hint_x: .2
+                #id: open_change_updown
+                id: month_label
+                background_normal: ""
+                background_color: 1, 1, 1, 0
+                text: ""
+                color: 0, 0, 0, 1
+                font_size: 50
+                on_release: root.open_change_updown()
+            
+                #Label:
+                #    #id: month_label
+                #    font_size: 50
+                #    text: ""
+                #    color: 0, 0, 0, 1
+                #    text_size: self.size
+                #    halign: 'center'
+                #    valign: 'middle'
+                #    center: root.center
+                
+            Button:
+                size_hint_x: .2
+                id: button_next
+                background_normal: ""
+                background_color: 1, 1, 1, 0
+                on_release: root.buttonNext()
+                Image:
+                    source: "image/next.png"
+                    pos: self.parent.x + self.parent.width / 3 , self.parent.y
+                    size: self.parent.width * 0.7, self.parent.height * 0.7
+                    allow_stretch: True
+        
+        
+        
+        # 曜日の表示部分
+        GridLayout:
+            size_hint_y: .05
+
+            cols: 7
+            rows: 1
+
+            spacing: 2
+            #padding: 4
+            
+            Button: 
+                text: "日"
+                color: 255 / 255, 26 / 255, 111 / 255, 1               
+                background_normal: ''
+                background_down: ''
+                background_color: 255 / 255, 213 / 255, 236 / 255, 1
+            Button: 
+                text: "月"
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+            Button: 
+                text: "火"
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+            Button: 
+                text: "水"
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+            Button: 
+                text: "木"
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+            Button: 
+                text: "金"
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+            Button: 
+                text: "土"
+                color: 19 / 255, 111 / 255, 255 / 255, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 186 / 255, 211 / 255, 255 / 255, 1
+        
+        
+        
+        # カレンダーの表示部分(行：1,2,3,...週目、 列：0(日),1(月),2(火),3(水),4(木),5(金),6(土))
+        GridLayout:
+            size_hint_y: .5
+
+            cols: 7
+            rows: 6
+
+            spacing: 2
+            #padding: 4
+
+            Button:
+                id: b10
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 255 / 255, 213 / 255, 236 / 255, 1
+                on_release: root.select(1,0)
+            Button: 
+                id: b11
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(1,1)
+            Button: 
+                id: b12
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(1,2)
+            Button: 
+                id: b13
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(1,3)
+            Button: 
+                id: b14
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(1,4)
+            Button: 
+                id: b15
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(1,5)
+            Button: 
+                id: b16
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 186 / 255, 211 / 255, 255 / 255, 1
+                on_release: root.select(1,6)
+                
+            Button: 
+                id: b20
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 255 / 255, 213 / 255, 236 / 255, 1
+                on_release: root.select(2,0)
+            Button: 
+                id: b21
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(2,1)
+            Button: 
+                id: b22
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(2,2)
+            Button: 
+                id: b23
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(2,3)
+            Button:
+                id: b24
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(2,4)
+            Button: 
+                id: b25
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(2,5)
+            Button: 
+                id: b26
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 186 / 255, 211 / 255, 255 / 255, 1
+                on_release: root.select(2,6)
+                
+            Button: 
+                id: b30
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 255 / 255, 213 / 255, 236 / 255, 1
+                on_release: root.select(3,0)
+            Button: 
+                id: b31
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(3,1)
+            Button:
+                id: b32
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(3,2)
+            Button: 
+                id: b33
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(3,3)
+            Button: 
+                id: b34
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(3,4)
+            Button: 
+                id: b35
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(3,5)
+            Button: 
+                id: b36
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 186 / 255, 211 / 255, 255 / 255, 1
+                on_release: root.select(3,6)
+                
+            Button: 
+                id: b40
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 255 / 255, 213 / 255, 236 / 255, 1
+                on_release: root.select(4,0)
+            Button: 
+                id: b41
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(4,1)
+            Button: 
+                id: b42
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(4,2)
+            Button: 
+                id: b43
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(4,3)
+            Button: 
+                id: b44
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(4,4)
+            Button: 
+                id: b45
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(4,5)
+            Button: 
+                id: b46
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 186 / 255, 211 / 255, 255 / 255, 1
+                on_release: root.select(4,6)
+                
+            Button: 
+                id: b50
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 255 / 255, 213 / 255, 236 / 255, 1
+                on_release: root.select(5,0)
+            Button: 
+                id: b51
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(5,1)
+            Button: 
+                id: b52
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(5,2)
+            Button: 
+                id: b53
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(5,3)
+            Button: 
+                id: b54
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(5,4)
+            Button: 
+                id: b55
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(5,5)
+            Button: 
+                id: b56
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 186 / 255, 211 / 255, 255 / 255, 1
+                on_release: root.select(5,6)
+                
+            Button: 
+                id: b60
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 255 / 255, 213 / 255, 236 / 255, 1
+                on_release: root.select(6,0)
+            Button: 
+                id: b61
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(6,1)
+            Button: 
+                id: b62
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(6,2)
+            Button: 
+                id: b63
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(6,3)
+            Button: 
+                id: b64
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(6,4)
+            Button: 
+                id: b65
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 245 / 255, 245 / 255, 245 / 255, 1
+                on_release: root.select(6,5)
+            Button: 
+                id: b66
+                text: ""
+                text_size: self.size
+                halign: 'left'
+                valign: 'top'
+                color: 0, 0, 0, 1
+                background_normal: ''
+                background_down: ''
+                background_color: 186 / 255, 211 / 255, 255 / 255, 1
+                on_release: root.open_list()
+                Image:
+                    source: "image/list.png"
+                    pos: self.parent.x + self.parent.width / 5 , self.parent.y + 15
+                    size: self.parent.width * 0.7, self.parent.height * 0.7
+                    allow_stretch: True
+            
+
+                
+
+# スケジュール確認のポップアップ
+<PopupList>:
+    canvas:
+        Color:
+            rgba: 0, 0, 0, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            
+    orientation: "vertical"
+    
+ 
+    # ポップアップウィンドウ
+    BoxLayout:
+        orientation: 'vertical'
+        size: self.size
+        
+        ScrollView:
+            size_hint_y: .7
+            do_scroll_x: False
+            do_scroll_y: True
+            bar_width: 4
+        
+            Label:
+                id: schedule
+                size_hint_x: 1.0
+                size_hint_y: None
+                text_size: self.width, None
+                height: self.texture_size[1]
+                text: root.schedule
+                
+        #Label:
+        #    id: schedule
+        #    size_hint_y: .7
+        #    color: 1, 1, 1, 1
+        #    text: root.schedule
+            
+            
+    BoxLayout:
+        size_hint_y: .1
+        TextInput:
+            id: input_year
+            halign: 'left'
+            valign: 'top'
+            hint_text: "Year"
+            
+        TextInput:
+            id: input_month
+            halign: 'left'
+            valign: 'top'
+            hint_text: "Month"
+            
+        TextInput:
+            id: input_day
+            halign: 'left'
+            valign: 'top'
+            hint_text: "Day"
+    
+    
+    TextInput:
+        size_hint_y: .2
+        id: input_schedule
+        halign: 'left'
+        valign: 'top'
+        hint_text: "Write a Schedule."
+        
+    Label:
+        size_hint_y: .05
+        text: ""
+        
+    
+    # キャンセルボタン
+    BoxLayout:
+        size_hint: 1, .1
+        Button:
+            text: "Cancel"
+            background_color: 0, .5, 1, 1
+            on_release: root.cancel()
+            
+        Button:
+            text: "Delete"
+            background_color: 0, .5, 1, 1
+            on_release: root.delete(input_schedule.text)
+            
+        Button:
+            text: "Save"
+            background_color: 0, .5, 1, 1
+            on_release: root.save(input_year.text, input_month.text, input_day.text, input_schedule.text)
+
+
+<PopupChange>:
+    canvas:
+        Color:
+            rgba: 0, 0, 0, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            
+    orientation: "vertical"
+    
+    Label:
+        size_hint_y: .4
+        text: ""
+        
+    BoxLayout:
+        size_hint_y: .1
+        Button:
+            text: "+"
+            background_color: 0, .5, 1, 1
+            on_release: root.up_down("up_year")
+            
+        Button:
+            text: "+"
+            background_color: 0, .5, 1, 1
+            on_release: root.up_down("up_month")
+    
+    
+    BoxLayout:
+        size_hint_y: .4
+        Label:
+            id: year_label
+            font_size: 50
+            color: 1, 1, 1, 1
+            text: root.year_label
+            
+        Label:
+            id: month_label
+            font_size: 50
+            color: 1, 1, 1, 1
+            text: root.month_label
+            
+    
+    BoxLayout:
+        size_hint_y: .1
+        Button:
+            text: "-"
+            background_color: 0, .5, 1, 1
+            on_release: root.up_down("down_year")
+            
+        Button:
+            text: "-"
+            background_color: 0, .5, 1, 1
+            on_release: root.up_down("down_month")
+        
+        
+    Label:
+        size_hint_y: .4
+        text: ""
+        
+        
+    # キャンセルボタン
+    BoxLayout:
+        size_hint: 1, .1
+        Button:
+            text: "Cancel"
+            background_color: 0, .5, 1, 1
+            on_release: root.cancel()
+            
+            
+<PopupSchedule>:
+    canvas:
+        Color:
+            rgba: 0, 0, 0, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            
+    orientation: "vertical"
+    
+    ScrollView:
+        do_scroll_x: False
+        do_scroll_y: True
+        bar_width: 4
+        
+        Label:
+            size_hint_x: 1.0
+            size_hint_y: None
+            text_size: self.width, None
+            height: self.texture_size[1]
+            text: root.schedule_list
+
+        
+    # キャンセルボタン
+    BoxLayout:
+        size_hint: 1, .1
+        Button:
+            text: "Cancel"
+            background_color: 0, .5, 1, 1
+            on_release: root.cancel()
