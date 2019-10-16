@@ -177,6 +177,8 @@ class Any_Calendar(BoxLayout):
     def buttonBack(self):
         this_month = datetime.datetime(self.year, self.month, self.day)
         month_ago = this_month - relativedelta(months=1)
+        if month_ago.month == 0: month_ago.month = 12
+        
         self.year = month_ago.year
         self.month = month_ago.month
         self.ids.month_label.text = str(self.year) + '/' + str(self.month)
@@ -190,6 +192,8 @@ class Any_Calendar(BoxLayout):
     def buttonNext(self):
         this_month = datetime.datetime(self.year, self.month, self.day)
         month_ago = this_month + relativedelta(months=1)
+        if month_ago.month == 13: month_ago.month = 1
+            
         self.year = month_ago.year
         self.month = month_ago.month
         self.ids.month_label.text = str(self.year) + '/' + str(self.month)
@@ -208,7 +212,7 @@ class Any_Calendar(BoxLayout):
     
     # ポップアップのdeleteボタン。指定したスケジュールをファイルから削除する
     # 削除したいスケジュールをフォームに入力した状態でdeleteを押すとそのスケジュールが削除される。
-    def delete(self, txt):
+    def delete(self, month, day, txt):
         """csvファイルからデータを読み出す"""
         schedule_list = []
         f = open("schedule.csv","r")
@@ -219,7 +223,9 @@ class Any_Calendar(BoxLayout):
         """入力されたテキストの行のみ削除して上書き"""
         new_schedule = []
         for schedule in schedule_list:
-            if not schedule[3] == txt:
+            if schedule[1] == month and schedule[2] == day and schedule[3] == txt:
+                pass
+            else:
                 new_schedule.append(schedule)
          
         f = open("schedule.csv", "w")
@@ -232,17 +238,21 @@ class Any_Calendar(BoxLayout):
     
     # ポップアップのsaveボタン
     def save(self, year, month, day, txt):
-        if str(month).isdigit() and str(day).isdigit():
-            f = open("schedule.csv","a")
-            writer = csv.writer(f)
-            if str(year) == "": year = 0
-            writer.writerow([year, month, day, txt])
-            f.close()
+        if str(year) == "" or str(year).isdigit():
+            if str(month).isdigit() and str(day).isdigit():
+                if (1 <= int(month) <= 12) and (1 <= int(day) <= 31):
+                    f = open("schedule.csv","a")
+                    writer = csv.writer(f)
+                    if str(year) == "": year = 0
+                    writer.writerow([year, month, day, txt])
+                    f.close()
     
     
     
     # カレンダーの年月を変更するポップアップの表示
     def open_change_updown(self):
+        PopupChange.changeLabel(self.year, self.month)
+        
         content = PopupChange(up_down=self.up_down, cancel=self.cancel)
         self.popup = Popup(title="Change year/month", content=content, size_hint=(.8, .7))
         self.popup.open()
@@ -255,10 +265,18 @@ class Any_Calendar(BoxLayout):
             self.year += 1
         elif flag == "up_month":
             self.month += 1
+            if self.month == 13:
+                self.month = 1
+                self.year += 1
         elif flag == "down_year":
             self.year -= 1
+            if self.year == 0:
+                self.year = datetime.date.today().year
         elif flag == "down_month":
             self.month -= 1
+            if self.month == 0:
+                self.month = 12
+                self.year -= 1
         else:
             print("error.")
     
@@ -313,11 +331,14 @@ class Any_Calendar(BoxLayout):
         
         """読み込んだデータを書き出す"""
         for schedule in schedule_list:
-            if schedule[0] == '0' or schedule[0] == str(self.year):
-                if schedule[1] == str(self.month):
-                    date = datetime.datetime(self.year, int(schedule[1]), int(schedule[2]))
-                    n_week, week_day = self.__get_week_number(date), (date.weekday() - 6) % 7
-                    self.add_btn_txt(n_week, week_day, '\n' + schedule[3])
+            try:
+                if schedule[0] == '0' or schedule[0] == str(self.year):
+                    if schedule[1] == str(self.month):
+                        date = datetime.datetime(self.year, int(schedule[1]), int(schedule[2]))
+                        n_week, week_day = self.__get_week_number(date), (date.weekday() - 6) % 7
+                        self.add_btn_txt(n_week, week_day, '\n' + schedule[3])
+            except:
+                pass
     
     
     
