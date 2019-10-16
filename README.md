@@ -6,7 +6,7 @@
 <img src="Screenshot_3.png" width="33%"> <img src="Screenshot_4.png" width="33%"> <img src="Screenshot_5.png" width="33%">
 
 月ごとに写真が変わるカレンダーアプリです。各日に予定を書き込むこともできます。mac及びAndroidで動作確認しています。<br>
-※サンプルのpicturesフォルダ内の画像についてはいずれもPAKUTASOさん（https://www.pakutaso.com ）のフリー画像を使用しています。
+※サンプルのpicturesフォルダ内の画像についてはいずれもPAKUTASOさん（https://www.pakutaso.com ）のフリー素材を使用しています。
 <br><br>
 
 ・実行すると始めに今日の日付を取得しその月のカレンダーを表示します。カレンダーは>ボタンを押すと次月、<ボタンを押すと前月に切り替えることができます。また年/月部分を押すと切り替え画面が出るのでそこでも変更することができます。
