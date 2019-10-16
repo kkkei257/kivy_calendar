@@ -5,7 +5,7 @@
 <img src="Screenshot_1.png" width="49%"> <img src="Screenshot_2.png" width="49%">
 <img src="Screenshot_3.png" width="33%"> <img src="Screenshot_4.png" width="33%"> <img src="Screenshot_5.png" width="33%">
 
-月ごとに写真が変わるカレンダーアプリです。各日に予定を書き込むこともできます。mac及びAndroidで動作確認しています。<br>
+月ごとに写真が変わるカレンダーアプリです。写真は好きなものを表示させることができます。カレンダーの各日に予定を書き込むこともできます。mac及びAndroidで動作確認しています。<br>
 ※サンプルのpicturesフォルダ内の画像についてはいずれもPAKUTASOさん（https://www.pakutaso.com ）のフリー素材を使用しています。
 <br><br>
 
