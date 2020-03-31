@@ -23,6 +23,7 @@ from kivy.properties import StringProperty, ListProperty, ObjectProperty
 from kivy.utils import get_color_from_hex
 from kivy.resources import resource_add_path
 from kivy.factory import Factory
+from kivy.clock import Clock
 
 import os
 import csv
@@ -102,7 +103,10 @@ class Any_Calendar(BoxLayout):
     # アプリ実行時の初期化の処理
     def __init__(self, **kwargs):
         super(Any_Calendar, self).__init__(**kwargs)
-        
+        Clock.schedule_once(self.on_start)
+    
+    
+    def on_start(self, *args):
         # ファイルがなければ作成
         if not os.path.isfile(os.getcwd() + "/schedule.csv"):
             f = open("schedule.csv","w")
@@ -121,7 +125,6 @@ class Any_Calendar(BoxLayout):
         
         # 画像の読み込み
         self.setImage()
-    
     
     
     # 画像のセット
@@ -181,6 +184,7 @@ class Any_Calendar(BoxLayout):
         
         self.year = month_ago.year
         self.month = month_ago.month
+        self.day = month_ago.day
         self.ids.month_label.text = str(self.year) + '/' + str(self.month)
         self.change_day(self.year, self.month)
         self.read_schedule()
@@ -196,6 +200,7 @@ class Any_Calendar(BoxLayout):
             
         self.year = month_ago.year
         self.month = month_ago.month
+        self.day = month_ago.day
         self.ids.month_label.text = str(self.year) + '/' + str(self.month)
         self.change_day(self.year, self.month)
         self.read_schedule()
